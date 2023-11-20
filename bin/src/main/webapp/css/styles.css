@@ -7736,19 +7736,6 @@ textarea.form-control-lg {
   padding-left: 1rem !important;
 }
 
-.sort{
-	display: flex;
-	justify-content: space-between;
-}
-.sort_insert{
-	float: left;
-}
-
-.sort_listType{
-	  float: right;
-  }
-
-
 .px-4 {
   padding-right: 1.5rem !important;
   padding-left: 1.5rem !important;
