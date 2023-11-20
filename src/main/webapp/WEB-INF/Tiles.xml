@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+<!-- 레이아웃 1, main page-->
+   <definition name="layout1" template="/WEB-INF/layout/layout1.jsp">
+      <put-attribute name="menu" value="/WEB-INF/layout/menu.jsp"/>
+      <put-attribute name="header" value="/WEB-INF/layout/header.jsp"/>
+      <put-attribute name="main" value="/WEB-INF/layout/main.jsp"/>
+      <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+   </definition>
+   
+   <!-- wild card, tiles mapping방법, name은 mapping주소, 1은 파일주소, 2는 jsp파일이름 -->
+   <definition name="/1/*/*" extends="layout1">
+   	<put-attribute name="main" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   </definition>
+   
+   <!-- wild card 레이아웃2 -->
+   <!--<definition name="/*/*" extends="layout2">
+   	<put-attribute name="category" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   </definition>-->
+   
+   <!-- 레이아웃2, detail page -->
+   <definition name="layout2" template="/WEB-INF/layout2/layout2.jsp">
+      <put-attribute name="menu" value="/WEB-INF/layout/menu.jsp"/>
+      <put-attribute name="main" value="/WEB-INF/layout/main.jsp"/>
+      <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+   </definition>
+   
+   <!-- wild card 레이아웃2 -->
+   <definition name="/2/*/*" extends="layout2">
+   	<put-attribute name="main" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   </definition>
+   
+   <!-- 레이아웃3 -->
+   <definition name="layout3" template="/WEB-INF/layout3/layout3.jsp">
+      <put-attribute name="main" value="/WEB-INF/layout/main.jsp"/>
+   </definition>
+   
+   <!-- wild card 레이아웃3 -->
+   <definition name="/3/*/*" extends="layout3">
+   	<put-attribute name="main" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   </definition>
+   
+   <!-- admin_레이아웃 -->
+   <definition name="admin_layout" template="/WEB-INF/layout-admin/admin_layout.jsp">
+      <put-attribute name="main" value="/WEB-INF/layout-admin/admin_main.jsp"/>
+      <put-attribute name="menu" value="/WEB-INF/layout-admin/admin_menu.jsp"/> 
+   </definition>
+   
+   <!-- wild card admin_레이아웃 -->
+   <definition name="/admin/*/*" extends="admin_layout">
+   	<put-attribute name="main" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   </definition>
+   
+   
+
+   
+</tiles-definitions>
