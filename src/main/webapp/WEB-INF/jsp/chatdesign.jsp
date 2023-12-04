@@ -351,6 +351,15 @@ body{
         color: white;
         font: 15px;
     }
+    
+#iamportPayment {
+	cursor: pointer;
+}
+
+#tossPayment {
+	border-radius: 30px;
+	cursor: pointer;
+}
 
 </style>
 <script type="text/javascript">
@@ -401,6 +410,13 @@ $(function(){
 		$("#msgfileupload").val(null);
 	});
 	
+	$("#iamportPayment").click(function(){ 
+		kakaopay(); //버튼 클릭하면 호출 
+    });
+
+	$("#tossPayment").click(function(){
+		tosspay();
+	});
 	
 });
 
@@ -496,6 +512,9 @@ $(function(){
 					profile+="<img src='../img/"+res.j_imageurl+"' alt='avatar'>";
 					profile+="<div class='chat-about'>";
 					profile+="<h6 class='m-b-0'>"+other+"<br><small style='color: gray;''>"+res.j_title +"</small></h6>";
+					profile+="<div style='float: right;'>";
+					profile+="<img src='../img/kakaopay.png' style='width: 70px; height: 30px' id='iamportPayment'> <img src='../img/toss.png' style='width: 70px; height: 30px' id='tossPayment'>";
+					profile+="</div>";
 					profile+="</div>";
 					
 					$("#profile").html(profile);
@@ -695,6 +714,116 @@ $(function(){
 			
 		}
 	}	
+	
+	function kakaopay() {
+		
+    	const randomString = generateRandomString(8);
+        IMP.init('imp78057427');//아임포트 관리자 콘솔에서 확인한 '가맹점 식별코드' 입력
+        IMP.request_pay({// param
+            pg: "kakaopay.TC0ONETIME", //pg사명 or pg사명.CID (잘못 입력할 경우, 기본 PG사가 띄워짐)
+            pay_method: "card", //지불 방법
+            merchant_uid: randomString, //"iamport_test_id", //가맹점 주문번호 (아임포트를 사용하는 가맹점에서 중복되지 않은 임의의 문자열을 입력)
+            name: "${dto.j_title}",//"도서", //결제창에 노출될 상품명
+            amount: "${dto.j_price}", //금액
+            //j_sangid: "${dto.j_sangid}",
+            //u_id: "${sessionScope.myid}"
+            //buyer_email : "${sessionScope.myemail}", 
+            //buyer_name : "${sessionScope.myname}",
+            //buyer_tel : "${sessionScope.myhp}"
+        }, function (rsp) { // callback
+            if (rsp.success) {
+            	
+        		var p_method = "kakaopay";
+        		var j_sangid = "${dto.j_sangid}";
+        		var u_id = "${sessionScope.myid}";
+            	
+            	
+                alert("구매가 완료되었습니다");
+                //alert(j_sangid)
+                $.ajax({
+        			type:"post",
+        			url:"/purchase/insert",
+        			data:{"p_method":p_method, "j_sangid":j_sangid, "u_id":u_id},
+        			dataType:"html",
+        			success:function(res){
+        				//alert("등록 성공");		
+        			}
+        		});
+                
+            } else {
+                alert("구매에 실패하였습니다\n 코드("+rsp.error_code+") / 메세지(" + rsp.error_msg + ")");
+            }
+        });
+    }
+	
+	function tosspay() {
+		const randomString = generateRandomString(8);
+		//토스페이
+		IMP.init("imp78057427");//아임포트 관리자 콘솔에서 확인한 '가맹점 식별코드' 입력
+    	IMP.request_pay({
+        pg : "tosspay",
+        pay_method : "card",
+        merchant_uid: randomString, // 상점에서 관리하는 주문 번호
+        name : "${dto.j_title}",
+        amount : "${dto.j_price}"
+        //buyer_email : "${sessionScope.myemail}",
+        //buyer_name : "${sessionScope.myname}",
+        //buyer_tel : '010-1234-5678',
+        //buyer_addr : '서울특별시 강남구 삼성동',
+        //buyer_postcode : '123-456'
+    }, function(rsp) {
+        if ( rsp.success ) {
+        	
+        	var p_method = "tosspay";
+    		var j_sangid = "${dto.j_sangid}";
+    		var u_id = "${sessionScope.myid}";
+    		
+    		alert("구매가 완료되었습니다");
+            //alert(j_sangid)
+            $.ajax({
+    			type:"post",
+    			url:"/purchase/insert",
+    			data:{"p_method":p_method, "j_sangid":j_sangid, "u_id":u_id},
+    			dataType:"html",
+    			success:function(res){
+    				//alert("등록 성공");		
+    			}
+    		});
+        	
+        	//[1] 서버단에서 결제정보 조회를 위해 jQuery ajax로 imp_uid 전달하기
+        	jQuery.ajax({
+        		url: "/payments/complete", //cross-domain error가 발생하지 않도록 주의해주세요
+        		type: 'POST',
+        		dataType: 'json',
+        		data: {
+    	    		imp_uid : rsp.imp_uid
+    	    		//기타 필요한 데이터가 있으면 추가 전달
+        		}
+        	}).done(function(data) {
+        		//[2] 서버에서 REST API로 결제정보확인 및 서비스루틴이 정상적인 경우
+        		if ( everythings_fine ) {
+        			var msg = '결제가 완료되었습니다.';
+        			msg += '\n고유ID : ' + rsp.imp_uid;
+        			msg += '\n상점 거래ID : ' + rsp.merchant_uid;
+        			msg += '\결제 금액 : ' + rsp.paid_amount;
+        			msg += '카드 승인번호 : ' + rsp.apply_num;
+        			
+        			alert(msg);
+        			
+        		} else {
+        			//[3] 아직 제대로 결제가 되지 않았습니다.
+        			//[4] 결제된 금액이 요청한 금액과 달라 결제를 자동취소처리하였습니다.
+        		}
+        	});
+        } else {
+            var msg = '결제에 실패하였습니다.';
+            msg += '에러내용 : ' + rsp.error_msg;
+            
+            alert(msg);
+        }
+    });
+	}
+
 
 </script>
 </head>
