@@ -251,6 +251,9 @@ body {
 .list-type > a{
 	text-decoration: none;
 }
+.addr-type > a {
+    text-decoration: none;
+}
 .item-list-content {
 	text-decoration: none;
 	width: 65rem;
@@ -280,9 +283,7 @@ body {
     font-family: Binggrae-Bold;
 	
 }
-list-type > a > h2{
-    text-decoration: none;
-}
+
 .item-list-price {
 	float: right;
     font-family: Binggrae-Bold;
