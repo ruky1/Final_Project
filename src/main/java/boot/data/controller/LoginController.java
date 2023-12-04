@@ -1,6 +1,7 @@
 package boot.data.controller;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
@@ -129,8 +130,6 @@ public class LoginController {
 			int failcheck =0;
 			if (idcheck) {failcheck = service.failcheck(u_id);
 			}
-			
-			
 			
 			System.out.println(service.getSerchId(u_id));
 			
@@ -326,5 +325,7 @@ public class LoginController {
 		
 		return "redirect:main";
 	}
+	
+
 	
 }

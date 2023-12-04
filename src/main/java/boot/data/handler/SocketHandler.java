@@ -27,6 +27,7 @@ import boot.data.service.MessageService;
 public class SocketHandler extends TextWebSocketHandler {
 	
 	HashMap<String, WebSocketSession> sessionMap = new HashMap<>(); //웹소켓 세션을 담아둘 맵
+
 	
 	@Autowired
 	MessageService mservice;
@@ -34,12 +35,18 @@ public class SocketHandler extends TextWebSocketHandler {
 	@Autowired
 	MessageRoomService roomservice;
 	
+	//로그인 한 인원 전체
+	private List<WebSocketSession> sessions = new ArrayList<WebSocketSession>();
+		
+	
 	//웹소켓 연결이 되면 동작하는 메소드
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         //소켓 연결시
         super.afterConnectionEstablished(session);
         sessionMap.put(session.getId(), session);
+        //웹 소켓이 생성될 때마다 리스트에 넣어줌
+      	sessions.add(session);
     }
     
     //웹소켓 연결이 종료되면 동작하는 메소드
@@ -52,7 +59,7 @@ public class SocketHandler extends TextWebSocketHandler {
     
   //메시지를 발송하면 동작하는 메소드
     @Override
-    public void handleTextMessage(WebSocketSession session, TextMessage message) {
+    public void handleTextMessage(WebSocketSession session, TextMessage message){
 
         //메시지 발송시
         String msg = message.getPayload();
@@ -63,12 +70,13 @@ public class SocketHandler extends TextWebSocketHandler {
       //메시지 구분(보낸사람:내용), default로 채팅방에 receiver는 판매자가 되고, sender는 구매자가 됨
         String mynum=ob.getString("mynum"); //보낸사람
         int room_num=ob.getInt("room_num"); //그룹
-        String reciever= roomservice.getRoomById(room_num).getReceiver_id();//받는사람num
+        String receiver= roomservice.getRoomById(room_num).getReceiver_id();//받는사람num
+        //String receiver = ob.getString("receiver");
         String content=ob.getString("msg"); //내용
         String type=ob.getString("type");
         
-        if(mynum.equals(reciever)) {//판매자가 채팅창에 들어올 때, 즉 구매자가 판매자의 메시지를 받는 사람이 됨
-        	reciever=roomservice.getRoomById(room_num).getSender_id();
+        if(mynum.equals(receiver)) {//판매자가 채팅창에 들어올 때, 즉 구매자가 판매자의 메시지를 받는 사람이 됨
+        	receiver=roomservice.getRoomById(room_num).getSender_id();
         }
         
         //메시지 저장
@@ -77,7 +85,7 @@ public class SocketHandler extends TextWebSocketHandler {
         String user_id=mynum;
         dto.setSender_id(user_id);
         
-        dto.setReceiver_id(reciever);
+        dto.setReceiver_id(receiver);
         
         dto.setRoom_num(room_num);
         
@@ -90,9 +98,21 @@ public class SocketHandler extends TextWebSocketHandler {
 		  
         mservice.insertMessage(dto);
         
+        //System.out.println((String) session.getAttributes().get("myid"));
+        
+        /*for(WebSocketSession single : sessions){
+        	
+        	String hsid = (String) single.getAttributes().get("myid");
+        	
+        	if(single.getAttributes().get("myid").equals(session.getAttributes().get("myid"))) {
+        		
+        	}
+        }*/
+        
         
         for(String key : sessionMap.keySet()) {
             WebSocketSession wss = sessionMap.get(key);
+            //System.out.println(sessionMap.get(session.getId()));
             try {
                 wss.sendMessage(new TextMessage(msg));
             }catch(Exception e) {

@@ -22,4 +22,6 @@ public interface MessageRoomMapperInter {
 	public List<MessageRoomDto> getRoomsBySangpum(int j_sangid);
 	
 	public List<MessageRoomDto> selectAllRooms(Map<String, String> map);
+	
+	public int getCountAllRoomsBySangpum(int sangidx);
 }

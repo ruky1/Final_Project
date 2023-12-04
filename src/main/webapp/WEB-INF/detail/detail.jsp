@@ -431,13 +431,14 @@ function list(){
 			</c:if>
 			</b><br> 
 			<small class="text-secondary">${dto.j_category }</small><br>
-			<b><fmt:formatNumber value="${dto.j_price }" type="currency" /></b><br>
-			<br>
+			<b><fmt:formatNumber value="${dto.j_price }" type="currency"/></b><br><br>
 			<div>
-				<p>${dto.j_explanation }</p>
+				<p>
+					${dto.j_explanation }
+				</p>
 			</div>
 			<div>
-				<small class="text-secondary">관심 ${dto.j_interest } 채팅 아직없음
+				<small class="text-secondary">관심 ${dto.j_interest } 채팅 ${roomCnt}
 					조회 ${dto.j_readcount }</small> <img src="../img/kakaopay.png"
 					style="width: 70px; height: 30px" id="iamportPayment"> <img
 					alt="" src="../img/toss.png" style="width: 70px; height: 30px"

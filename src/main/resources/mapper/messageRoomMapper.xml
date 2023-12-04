@@ -22,4 +22,8 @@
 			and j_sangid=#{sangidx}
 		</if>		 
 	</select>
+	<select id="getCountAllRoomsBySangpum" parameterType="int" resultType="int">
+		select count(*) from messageroom where j_sangid=#{sangidx}
+
+	</select>
 </mapper>

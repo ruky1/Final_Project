@@ -459,6 +459,7 @@ $(function(){
 			});
 		
 	}
+	
 
 
 	//상대방과 하던 채팅 가져오기
@@ -562,7 +563,6 @@ $(function(){
 		
 	};
 	
-	
 
 
 	
@@ -576,8 +576,9 @@ $(function(){
 	function wsEvt() {
 		ws.onopen = function(data) {
 			//소켓이 열리면 초기화 세팅하기
-			getChattingRooms("${sessionScope.myid}","${sangidx}");
-			//getChatting(room_num, other);
+			
+			//getChattingRooms("${sessionScope.myid}","${sangidx}");
+			
 		}
 		
 		//getChatting(room_num, other);
@@ -587,9 +588,9 @@ $(function(){
 			var msg = data.data;
 			var msgJson = JSON.parse(msg);
 			
-			getChattingRooms("${sessionScope.myid}","${sangidx}");
 			getChatting(room_num, other);
-
+			getChattingRooms("${sessionScope.myid}","${sangidx}");//멤버 리스트 다시 불러오기
+			
 		}
 
 		//채팅 입력창에서 엔터 누르면 채팅 보내짐
@@ -597,8 +598,8 @@ $(function(){
 			if (e.keyCode == 13) { //enter press
 				if ($("#chatting").val() != '') {
 					send();
-					getChatting(room_num, other);
-					getChattingRooms("${sessionScope.myid}","${sangidx}");
+					/* getChattingRooms("${sessionScope.myid}","${sangidx}");
+					getChatting(room_num, other); */		
 				}
 			}
 		});
@@ -624,6 +625,7 @@ $(function(){
 						"room_num" : room_num,
 						"msg" : msg,
 						"mynum" : mynum,
+						"receiver" : other,
 						"type" : "chat"
 					}));
 					
@@ -652,6 +654,7 @@ $(function(){
 							"room_num" : room_num,
 							"msg" : res.upload,
 							"mynum" : mynum,
+							"receiver" : other,
 							"type" : "img"
 						}));
 
@@ -666,17 +669,29 @@ $(function(){
 						"room_num" : room_num,
 						"msg" : msg,
 						"mynum" : mynum,
+						"receiver" : other,
 						"type" : "chat"
 					}));
 				}
 			}
 			
-			/* getChatting(room_num, other);
-			getChattingRooms("${sessionScope.myid}","${sangidx}"); */
-				
+			//현재 user가 receiver인경우 알림을 읽음
+			$.ajax({
+				type:"get",
+				dataType:"html",
+				url:"/message/alarmRead",
+				data:{"room_num":room_num},
+				success:function(){
+					//alert("message read update!");
+				}
+			});
+		
 
 			$("#chatting").val("");
 			
+			getChatting(room_num, other);
+			getChattingRooms("${sessionScope.myid}","${sangidx}");
+
 			
 		}
 	}	
@@ -704,18 +719,6 @@ $(function(){
                 	
                 	<div class="chatrooms"></div>
                 	
-                	<!-- 판매자일경우 구매자들의 방을 가져옴 -->
-                	<%-- <c:if test="${room_num==0 }">
-                		<c:forEach var="room" items="${rooms }">
-                			<li class="clearfix" onclick="getChatting(${room.room_num})">
-                        		<img src="../img/${sangdto.j_imageurl }"" alt="avatar">
-                        			<div class="about">
-                            			<div class="name">${room.sender_id }</div>
-                            			<div class="status">${room.recent_mess }</div>                                            
-                        			</div>
-                    		</li>
-                		</c:forEach>
-                	</c:if> --%>
                 </div>
                 
                 </ul>
@@ -727,12 +730,6 @@ $(function(){
                 <div class="chat-header clearfix">
                     <div class="row">
                         <div class="col-lg-6">
-	                        	<%-- <c:if test="${sangpum.j_imageurl!=null }">
-	                        		<img src="../img/${sangpum.j_imageurl }"" alt="avatar">
-	                        	</c:if>                         
-	                            <div class="chat-about">
-	                                <h6 class="m-b-0">${sangpum.member_id}<br><small style="color: gray;">${sangpum.j_title }</small></h6>
-	                            </div> --%>
 	                            <div id="profile"></div>
                         </div>
                     </div>

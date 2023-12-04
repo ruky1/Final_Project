@@ -39,13 +39,16 @@
 	<%
 	
 		String a_id=(String)session.getAttribute("a_id");
-	String a_name=(String)session.getAttribute("a_name");
-	
-		if(a_id==null&&a_name==null){
+		String a_name=(String)session.getAttribute("a_name");
+		
+		if(a_id==null||a_name==null){
 	%>
 		    <script>
 		        // JavaScript를 사용하여 이전 페이지로 리다이렉트
-		        history.back();
+		      
+		        	/* history.back(); */
+		        	location.href="/fail_a_id";
+		       
 		    </script>
 	<%
 		}
@@ -65,6 +68,8 @@
 			<tiles:insertAttribute name="menu" />
 		</div>
 	</div>
-
+<script type="text/javascript">
+	
+</script>
 </body>
 </html>

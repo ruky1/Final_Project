@@ -16,4 +16,5 @@ public interface MessageRoomServiceInter {
 	public List<MessageRoomDto> getRoomsBySangpum(int j_sangid);
 	//채팅방 가져오기
 	public List<MessageRoomDto> selectAllRooms(String user_id, String sangidx);
+	public int getCountAllRoomsBySangpum(int sangidx);//상품별 채팅방의 개수 출력
 }

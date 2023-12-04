@@ -12,9 +12,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <table class="board-table">
+<h3>잠금회원 목록</h3>
+  <table class="table">
                 
-                <tr align="center">
+                <tr align="center" class="table-warning">
                     <th>num</th>
                     <th>id</th>
                     <th>name</th>
@@ -35,7 +36,7 @@
 					<td align="center">
 					
 					
-					<button type="button" onclick="location.href='../failreset?u_id=${ldto.u_id}'">잠금해제</button>
+					<button type="button" class="btn btn-outline-warning" onclick="location.href='../failreset?u_id=${ldto.u_id}'">잠금해제</button>
 					</td>
                 </tr>
                 </c:forEach>

@@ -64,6 +64,12 @@ public class MessageRoomService implements MessageRoomServiceInter {
 		return mapper.selectAllRooms(map);
 	}
 
+	@Override
+	public int getCountAllRoomsBySangpum(int sangidx) {
+		// TODO Auto-generated method stub
+		return mapper.getCountAllRoomsBySangpum(sangidx);
+	}
+
 	
 
 }

@@ -78,30 +78,62 @@ nav{
 
 </style>
 <script type="text/javascript">
+
+	var ws2;
+	
+	//웹소켓 오픈(메시지 알림)
+	function wsOpen2(){
+		ws2 = new WebSocket("ws://" + location.host + "/chating");
+		wsEvt2();
+	}
+	
+	function wsEvt2(){
+		ws2.onopen = function(data) {
+			//소켓이 열리면 초기화 세팅하기
+			getMsgAlarm();
+		}
+	
+		//메시지 잘 들어왔을 때 실행하는 내용
+		ws2.onmessage = function(data){
+			getMsgAlarm(); //메시지 개수 확인->알림표시
+		}
+	}
+	
+	function getMsgAlarm(){
+		
+		var user_id = "${sessionScope.myid}";
+		   
+		   if(user_id!="guest"){
+			   $.ajax({
+				   type:"get",
+				   dataType:"json",
+				   url:"/message/totalAlarm",
+				   data:{"user_id":user_id},
+				   success:function(res){
+					   
+					   if(res>0){//알림이 있을 경우
+							$(".note-num").text(res);
+					   		$(".note-num").show();
+					   }
+					   
+				   }
+			   });
+		   }
+		
+		
+	}
+	
+
    $(function(){
-      
-      $(".note-num").hide();
-      
-      var user_id = "${sessionScope.myid}";
-      
-      if(user_id!="guest"){
-         $.ajax({
-            type:"get",
-            dataType:"json",
-            url:"/message/totalAlarm",
-            data:{"user_id":user_id},
-            success:function(res){
-               
-               if(res!=0){//알림이 있을 경우
-                  $("#note-num").addClass("note-num");
-                  $(".note-num").text(res);
-                     $(".note-num").show();
-               }
-               
-            }
-         });
-      }
-      
+	   
+	   wsOpen2(); //웹소켓 열기
+	   
+	   $(".note-num").hide();
+	   
+	   getMsgAlarm();
+	   
+	   
+	   
       $("#search").keyup(function(){
          
          var search=$(this).val();
@@ -203,8 +235,6 @@ nav{
                      <li><a class="dropdown-item" href="/">New Arrivals</a></li>
                   </ul></li>
             </ul>
-
-
             <div style="justify-content: space-between;">
             <c:if test="${sessionScope.loginok==null}">
             <button type="button" class="btn btn-outline-primary" onclick="location.href='../loginform'">로그인</button>

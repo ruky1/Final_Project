@@ -121,7 +121,7 @@ public class MessageController {
 		
 	@GetMapping("/message/alarmRead")
 	@ResponseBody
-	public int alarmRead(@RequestParam int room_num, HttpSession session) {
+	public void alarmRead(@RequestParam int room_num, HttpSession session) {
 		
 		String user_id = (String)session.getAttribute("myid");
 		
@@ -136,8 +136,7 @@ public class MessageController {
 				mservice.messageReadByNum(mess.getMess_num());
 			}
 		}
-		
-		return 0;
+
 	}
 	
 	
@@ -178,7 +177,7 @@ public class MessageController {
 			}
 
 			long diffSec=(today.getTime()-writeday.getTime());
-			diffSec-=32400000L; //DB에 now()로 들어가는 시간이 9시간 차이 나서 빼줌
+			//diffSec-=32400000L; //DB에 now()로 들어가는 시간이 9시간 차이 나서 빼줌
 			/*System.out.println(diffSec); */
 
 			//일시분초

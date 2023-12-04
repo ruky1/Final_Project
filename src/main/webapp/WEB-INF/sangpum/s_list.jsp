@@ -130,8 +130,8 @@
   	     	<br><br><br>
   	     	<div class="UI_option container">
 	  	     	<c:if test="${totalPage>0 }">
-					<div style="width: 30rem; text-align: center;" id="pageList" class="pageList">
-						<ul class="pagination justify-content-center pageList">
+					<div style="width: 30rem; text-align: center;" class="pageList">
+						<ul class="pagination justify-content-center pageList"  id="pageList">
 							<!-- 이전 -->
 							<c:if test="${startPage>1 }">
 								<li class="page-item"><a
@@ -259,7 +259,7 @@ const observerList = new IntersectionObserver((entries) => {
          	  	if (data.length < perpage) {
                     // 데이터가 더 이상 없을 때 loading 숨김
                     $('#loadingList').hide();
-                    $("#pageList").hide();
+                    document.getElementById("pageList").style.display = "none";
                   }
          	  	
          	  	currentPage++;
@@ -355,6 +355,7 @@ $(document).ready(function() {
                     addrContent += "</a>";
                 });
                 // 리스트의 기존 내용 제거
+                document.getElementById("pageList").style.display = "none";
                 $('.addr-type').empty();
                 
                 if(data.length > 0){
@@ -363,7 +364,8 @@ $(document).ready(function() {
                 }
                 if(data.length==0){
                 	alert("등록된 게시글이 없습니다");
-                	$('.addr-type').empty();	
+                	$('.addr-type').empty();
+                	document.getElementById("pageList").style.display = "none";
                 }
         		// 페이지 숫자를 초기화
         	    currentPage = 0;

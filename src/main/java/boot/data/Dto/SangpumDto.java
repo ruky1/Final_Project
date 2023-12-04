@@ -30,5 +30,4 @@ public class SangpumDto {
 	//구매일자 메소드
 	private String[] buydate;
 	
-	private int sellcomplete;
 }
