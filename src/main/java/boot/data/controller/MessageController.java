@@ -231,6 +231,17 @@ public class MessageController {
 		return sangpum;
 	}
 	
+	@PostMapping("/message/sangpuminfo")
+	@ResponseBody
+	public SangpumDto sangpuminfo(@RequestParam int sangidx) {
+		
+		//System.out.println(sangidx);
+		
+		SangpumDto dto = sangservice.getSangpumById(sangidx);
+		
+		return dto;
+	}
+	
 	
 	@PostMapping("/message/fileupload")
 	@ResponseBody

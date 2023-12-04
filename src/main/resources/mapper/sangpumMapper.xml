@@ -31,7 +31,7 @@
 	</select>
 	
 	<insert id="insertSangpum" parameterType="sangpum">
-		insert into junggosangpum values(null, #{j_title}, #{j_price}, #{member_id}, #{member_name}, #{member_hp}, #{j_explanation}, #{j_category}, now(), #{j_addr}, #{j_imageurl} , 0, 0)
+		insert into junggosangpum values(null, #{j_title}, #{j_price}, #{member_id}, #{member_name}, #{member_hp}, #{j_explanation}, #{j_category}, now(), #{j_addr}, #{j_imageurl} , 0, 0, 0)
 	</insert>
 
 	<update id="updateSangpum" parameterType="sangpum">

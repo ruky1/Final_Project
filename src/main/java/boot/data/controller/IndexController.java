@@ -44,6 +44,7 @@ public class IndexController {
 			@RequestParam(value = "search", required = false) String search, 
 			@ModelAttribute SangpumDto dto,
 			HttpSession session) {
+		
 		ModelAndView model = new ModelAndView();
 		
 		int totalCount;

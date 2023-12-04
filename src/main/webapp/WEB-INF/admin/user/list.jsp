@@ -12,6 +12,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+
 	<h3>회원목록</h3>
 	<table class="table">
 		<tr class="table-danger">
@@ -33,7 +34,16 @@
 					<jsp:include page="user_correction.jsp">
 						<jsp:param value="${n_dto.n_num }" name="num"/>
 					</jsp:include>
-					<button type="button" class="u_del btn btn-outline-danger" num="${u_dto.u_id }" >삭제</button>
+						<c:choose>
+						    <c:when test="${a_write eq 2}">
+						        <button type="button" class="u_del btn btn-outline-danger" num="${u_dto.u_id}">삭제</button>
+						    </c:when>
+						    <c:otherwise>
+						        <!-- ${a_write}가 2와 같지 않은 경우에 실행할 내용 -->
+						        <!-- 예를 들어 다른 버튼 또는 메시지를 표시할 수 있습니다. -->
+						        <h>권한이없습니다</h>
+						    </c:otherwise>
+						</c:choose>
 					</td>
                 </tr>
                 </c:forEach>

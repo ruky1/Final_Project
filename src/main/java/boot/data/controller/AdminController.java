@@ -23,7 +23,7 @@ import boot.data.Dto.NoticeDto;
 import boot.data.Dto.SangpumDto;
 import boot.data.Dto.UserDto;
 import boot.data.service.AdminService;
-import boot.data.service.LoginService;
+
 
 @Controller
 public class AdminController {
@@ -34,14 +34,14 @@ public class AdminController {
 	
 	@GetMapping("/admin")
 	public String adminIndex(HttpSession session, Model model) {
-		//폼에 id 얻어줘야함
-				String adminid=(String)session.getAttribute("a_id");
+	
 				//로그인인지 아닌지 판단
 				String adminloginok=(String)session.getAttribute("a_loginok");
 				
 				 
 				//한번도 실행안하면 null
 				if(adminloginok==null) {
+				
 					return "/3/adminlogin/adminLoginForm";
 				}
 				model.addAttribute("t_u_l_count", service.adminTodayLogin());
@@ -51,7 +51,9 @@ public class AdminController {
 	}
 	
 	@PostMapping("/adminPage_action")
-	public String loginproc(@RequestParam String a_id, @RequestParam String a_pass,@RequestParam(required = false) String savechk,HttpSession session) {
+	public ModelAndView loginproc(@RequestParam String a_id, @RequestParam String a_pass,@RequestParam(required = false) String savechk,HttpSession session) {
+		ModelAndView model=new ModelAndView();
+		
 		HashMap<String, String>map=new HashMap<>();
 		int check=service.adminLoginPassCheck(a_id, a_pass);
 		if(check==1) {
@@ -64,11 +66,15 @@ public class AdminController {
 			session.setAttribute("a_right",a_dto.getA_right());
 			session.setAttribute("a_hp", a_dto.getA_hp());
 			session.setAttribute("a_name",a_dto.getA_name());
+			model.addObject("t_u_l_count", service.adminTodayLogin());
+			model.addObject("y_u_l_count", service.adminYesterdayLogin());
+			model.addObject("w_u_l_count", service.adminWeekLogin());
 			
-			return "/admin/layout-admin/admin_main/admin_main";
+			model.setViewName("/admin/layout-admin/admin_main/admin_main");
+			return model;
 		}
-		
-		return "/3/adminlogin/passFail";
+		model.setViewName("/3/adminlogin/passFail");
+		return model;
 	}
 	
 	@GetMapping("/adminlogoutprocess")
@@ -216,13 +222,12 @@ public class AdminController {
 	}
 	
 	@GetMapping("/a_userlist")
-	public String a_userlist(Model model) {
-		
+	public String a_userlist(Model model,HttpSession session) {
 		List<UserDto> list = new ArrayList<>();
 		list= service.userList(); 
 		
 		model.addAttribute("list",list);
-
+		model.addAttribute("a_write",session.getAttribute("a_write"));
 		 return "/admin/admin/user/list";
 
 	}
@@ -251,7 +256,10 @@ public class AdminController {
 		return "redirect:a_userlist";
 		
 	}
-	
+	@GetMapping("fail_a_id")
+	public String fall_a_id() {
+		return "/3/fail/a_id_fail";
+	}
 	
 	
 	
