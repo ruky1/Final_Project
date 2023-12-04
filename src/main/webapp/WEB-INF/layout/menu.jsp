@@ -39,10 +39,10 @@ nav{
    .note-num {
     position: absolute;
     top: -2px;
-    right: -7px;
+    right: -6.5px;
     z-index: 3;
-    height: 20px;
-    width: 20px;
+    height: 17px;
+    width: 17px;
     line-height: 20px;
     text-align: center;
     background-color: red;
@@ -79,56 +79,11 @@ nav{
 </style>
 <script type="text/javascript">
 
-	var ws2;
-	
-	//웹소켓 오픈(메시지 알림)
-	function wsOpen2(){
-		ws2 = new WebSocket("ws://" + location.host + "/chating");
-		wsEvt2();
-	}
-	
-	function wsEvt2(){
-		ws2.onopen = function(data) {
-			//소켓이 열리면 초기화 세팅하기
-			getMsgAlarm();
-		}
-	
-		//메시지 잘 들어왔을 때 실행하는 내용
-		ws2.onmessage = function(data){
-			getMsgAlarm(); //메시지 개수 확인->알림표시
-		}
-	}
-	
-	function getMsgAlarm(){
-		
-		var user_id = "${sessionScope.myid}";
-		   
-		   if(user_id!="guest"){
-			   $.ajax({
-				   type:"get",
-				   dataType:"json",
-				   url:"/message/totalAlarm",
-				   data:{"user_id":user_id},
-				   success:function(res){
-					   
-					   if(res>0){//알림이 있을 경우
-							$(".note-num").text(res);
-					   		$(".note-num").show();
-					   }
-					   
-				   }
-			   });
-		   }
-		
-		
-	}
-	
-
    $(function(){
 	   
-	   wsOpen2(); //웹소켓 열기
+	   //$(".note-num").hide();
 	   
-	   $(".note-num").hide();
+	   wsOpen2(); //웹소켓 열기
 	   
 	   getMsgAlarm();
 	   
@@ -201,12 +156,58 @@ nav{
       $(this).css("background-color", "white");
    }); 
    
+	var ws2;
+	
+	//웹소켓 오픈(메시지 알림)
+	function wsOpen2(){
+		ws2 = new WebSocket("ws://" + location.host + "/chating");
+		wsEvt2();
+	}
+	
+	function wsEvt2(){
+		ws2.onopen = function(data) {
+			//소켓이 열리면 초기화 세팅하기
+			getMsgAlarm();
+		}
+	
+		//메시지 잘 들어왔을 때 실행하는 내용
+		ws2.onmessage = function(data){
+			getMsgAlarm(); //메시지 개수 확인->알림표시
+		}
+	}
+	
+	function getMsgAlarm(){
+		
+		var user_id = "${sessionScope.myid}";
+		   
+		   if(user_id!="guest"){
+			   $.ajax({
+				   type:"get",
+				   dataType:"json",
+				   url:"/message/totalAlarm",
+				   data:{"user_id":user_id},
+				   success:function(res){
+					   
+					   if(res>0){//알림이 있을 경우
+							//$(".note-num").text(res);
+					   		//$(".note-num").show();
+					   		$("#note-num").addClass("note-num");
+					   		$(".note-num").text(res);
+					   }
+					   
+				   }
+			   });
+		   }
+		
+		
+	}
+	
+   
    
 </script>
 
 </head>
 <body>
-
 
    <!-- Navigation-->
    <nav class="navbar navbar-expand-lg navbar-light">
@@ -235,15 +236,19 @@ nav{
                      <li><a class="dropdown-item" href="/">New Arrivals</a></li>
                   </ul></li>
             </ul>
+
+
+
             <div style="justify-content: space-between;">
             <c:if test="${sessionScope.loginok==null}">
-            <button type="button" class="btn btn-outline-primary" onclick="location.href='../loginform'">로그인</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='../loginform'">로그인</button>
             </c:if>
             
             <c:if test="${sessionScope.loginok!=null}">
-            <img alt="" src="../img/loginprofile.png" width="50vw" height="50vh" align="left" style="border-radius:30px;"/>
-            <b>${sessionScope.myname}님이 로그인중입니다</b>
-            <button type="button" class="btn btn-outline-primary" onclick="location.href='../logoutprocess'">로그아웃</button>
+            <img alt="" src="../img/loginprofile.png" width="30vw" height="30vh" align="left" style="border-radius:30px; border: 1px solid gray;"/>
+            <b style="font-size: 0.7em; float: left;">${sessionScope.myname}님이 로그인중입니다</b>
+             <i class="bi bi-bell" id="notification" style="cursor: pointer; font-size: 0.8em;" onclick="location.href='/goChattingRoom'"><span id="note-num" style="font-size: 0.8em;"></span></i><br>
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='../logoutprocess'">로그아웃</button>
             </c:if>
             
             
@@ -255,7 +260,7 @@ nav{
             </c:if>
 
             <!-- 검색창 -->
-            <div class="input-group w-25">
+            <span class="w-25">
               
               <c:choose>
                <c:when test="${sessionScope.myid == null}">
@@ -266,18 +271,18 @@ nav{
                <c:when test="${sessionScope.myid != null}">
                   <i class="bi bi-search" onclick="location.href='/search?s_id=${sessionScope.myid}'" style="cursor: pointer;"></i>
                   <!-- 채팅방 , /message/getMessageList?user_id=${sessionScope.myid}-->
-                  <div>
+              
                   
-                     <i class="bi bi-bell" id="notification" style="cursor: pointer;" onclick="location.href='/goChattingRoom'"><span id="note-num"></span></i>
+                    
                      
-                  </div>
+                  
                </c:when>
                <c:otherwise>
                <p>와 호스기 보소</p>
                </c:otherwise>
                </c:choose>
                   
-            </div>
+            </span>
 
          </div>
          

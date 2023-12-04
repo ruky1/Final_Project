@@ -86,6 +86,7 @@ $(function(){
 
     $("#btnsearch2").click(async function (e) {
         console.log("Button clicked");
+        
 
         var search = $("#search2").val(); // 검색어
         var option = $("#selOption").val(); // 필터
@@ -171,6 +172,8 @@ $(function(){
         } catch (error) {
             console.error("Error:", error);
         }
+        
+        $("#result2").html("");
     });
 	
     //처음 검색 결과 창 진입 시 리스트 출력 
