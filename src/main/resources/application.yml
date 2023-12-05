@@ -31,3 +31,9 @@ mybatis:
   type-aliases-package: boot.data.*
   mapper-locations:
   - mapper/**/*.xml
+
+#coolsms
+coolsms:
+  api:
+    key: NCS95BFETLQ3QNUG
+    secret: 3M5CKRRS4JLB6WMHYLEIEJIQFP1YWLSB

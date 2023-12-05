@@ -12,8 +12,8 @@
 </head>
 <body>
 <div style="height: 66vh;">
-<h1 align="center">짝짝짝</h1> 
-<h1 align="center">아이디찾은걸축하드립니다</h1>
+<h1 align="center">짝 짝 짝</h1> 
+<h1 align="center">아이디 찾은걸 축하드립니다</h1>
 <h1 align="center">고객님의 아이디는 ${sessionScope.findid} 입니다</h1>
 </div>
 </body>

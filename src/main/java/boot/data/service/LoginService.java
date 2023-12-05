@@ -118,8 +118,12 @@ public class LoginService implements LoginServiceInter {
 		loginInter.pwchange(u_id, u_pass);
 		
 	}
-	
-	 
+	@Override
+	public int randomnum() {
+	    int min = 100000; // 6자리 숫자 중 최소값
+	    int max = 999999; // 6자리 숫자 중 최대값
+	    return (int) (Math.random() * (max - min + 1)) + min;
+	}
 	
 	
 

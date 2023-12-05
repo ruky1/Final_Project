@@ -22,5 +22,5 @@ public interface LoginServiceInter {
 	
 	public int findpwstart(String u_id, String u_hp); //아이디전화번호 체크
 	public void pwchange(String u_id, String u_pass); //비밀번호 변경
-	
+	public int randomnum(); //난수생성
 }

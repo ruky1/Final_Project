@@ -21,15 +21,28 @@ color: red;
 </style>
 <script type="text/javascript">
 $(function(){
-    $("#checkbox1").click(function(){
+    var checkedbox=false;
+    var passwords =false;
+    
+	//필수약관 누를시
+	$("#checkbox1").click(function(){
         if ($(this).prop("checked")) {
-            $("#btnjoin").css("background-color", "gray");
-         // 체크되면 버튼을 활성화
-            $("#btnjoin").prop("disabled", false);
+        	checkedbox = true;
+        	if(passwords) { 
+            	
+            	//색깔변경
+                $("#btnjoin").css("background-color", "gray");
+                //체크되면 버튼을 활성화
+                $("#btnjoin").prop("disabled", false);
+            }
         } else {
-            $("#btnjoin").css("background-color", "lightgray");
-         // 체크 해제되면 버튼 비활성화
-            $("#btnjoin").prop("disabled", true);
+        	checkedbox=false;
+        		//색변경
+            	$("#btnjoin").css("background-color", "lightgray");
+                // 체크 해제되면 버튼 비활성화
+                   $("#btnjoin").prop("disabled", true);
+            
+            
         }
     });
     
@@ -53,20 +66,38 @@ $(function(){
         if (!isLengthShort && regex.test(password) && !isLengthLong) {
             // 조건에 맞으면 메시지를 양식맞음으로 변경
             $(".passcheck").html("양식과 일치합니다").css("color", "green");
+            passwords=true;
+            if(checkedbox) { 
+            	
+            	//색깔변경
+                $("#btnjoin").css("background-color", "gray");
+                //체크되면 버튼을 활성화
+                $("#btnjoin").prop("disabled", false);
+            }
+         
         } else {
+        	passwords=false;
+        		
+        	//색변경
+            	$("#btnjoin").css("background-color", "lightgray");
+                // 체크 해제되면 버튼 비활성화
+                   $("#btnjoin").prop("disabled", true);
+            
             // 조건에 맞지 않으면 메시지를 양식틀림으로 변경
             if (isLengthShort) {
+            	
                 $(".passcheck").html("비밀번호는 8자 이상이어야 합니다.").css("color", "red");
             } else if (isLengthLong) {
+            	
                 $(".passcheck").html("비밀번호는 16자를 초과할 수 없습니다.").css("color", "red");
             } else {
+            	
                 $(".passcheck").html("비밀번호는 특수문자, 알파벳, 숫자가 각각 1개 이상 포함되어야 하며 8자에서 16자 사이여야 합니다.").css("color", "red");
             }
         }
     });
+ 	
 
-
-    
     //잇는거 재가입안되게
     <c:if test="${not empty error}">
         alert("${error}");
@@ -75,22 +106,6 @@ $(function(){
    
     
 });
-/*
-document.addEventListener('keydown', function(event) {
-    switch(event.key) {
-        case 'ArrowUp':
-            // 위쪽 방향키 눌렸을 때의 동작
-            //console.log('Up key pressed');
-           $("#btntest").css("background-color","red");
-            break;
-        case 'ArrowDown':
-            // 아래쪽 방향키 눌렸을 때의 동작
-           // console.log('Down key pressed');
-            $("#btntest").css("background-color","blue");
-            break;
-        
-    }
-}); */
 
 
 //폼 제출 전 체크 함수
@@ -175,7 +190,7 @@ document.addEventListener('keydown', function(event) {
 			 <br>
 			 
 			 <button type="submit" id="btnjoin" style="align:center; width:40vw; height:10vh; 
-			 border-radius: 30px; border: 0px; font-size: 20pt; color: white; background-color: lightgray">
+			 border-radius: 30px; border: 0px; font-size: 20pt; color: white; background-color: lightgray" disabled="disabled">
 			 가입하기
 			 </button>
 			 

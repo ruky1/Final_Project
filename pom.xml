@@ -82,6 +82,15 @@
 		    <version>20210307</version>
 		</dependency>
       
+      <!--coolsms 문자인증-->
+    <dependency>
+    <groupId>net.nurigo</groupId>
+    <artifactId>sdk</artifactId>
+    <version>4.3.0</version>
+	</dependency>
+      
+      
+      
      <!-- Gson 의존성 추가 -->
     <dependency>
         <groupId>com.google.code.gson</groupId>
@@ -90,12 +99,7 @@
     </dependency>
     
     
-    <!--coolsms 문자인증-->
-    <dependency>
-    <groupId>net.nurigo</groupId>
-    <artifactId>sdk</artifactId>
-    <version>4.3.0</version>
-</dependency>
+    
     
     
 		<dependency>

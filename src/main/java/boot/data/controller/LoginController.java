@@ -24,6 +24,10 @@ import boot.data.mapper.SangpumMapperInter;
 import boot.data.service.LoginService;
 import boot.data.service.SangpumService;
 import boot.data.service.SangpumServiceInter;
+import net.nurigo.sdk.NurigoApp;
+import net.nurigo.sdk.message.exception.NurigoMessageNotReceivedException;
+import net.nurigo.sdk.message.model.Message;
+import net.nurigo.sdk.message.service.DefaultMessageService;
 
 @Controller
 public class LoginController {
@@ -36,6 +40,7 @@ public class LoginController {
 	
 	@Autowired
 	LoginService service;
+	
 	
 	@Autowired
 	SangpumService sangService;
@@ -192,28 +197,68 @@ public class LoginController {
 		//비밀번호 찾기폼에서 인증번호 확인되면 새로운비밀번호설정폼으로 이동시킴
 		@PostMapping("/findpw")
 		public ModelAndView findpw(@RequestParam String u_id,
-				@RequestParam String u_hp
+				@RequestParam String u_hp,
+				@RequestParam String otp, //입력칸
+				HttpSession session
 				)
 		{
 			ModelAndView model = new ModelAndView();
 			HashMap<String, String> map = new HashMap<>();
 			
-			//System.out.println(u_id);
+			
 			service.findpwstart(u_id, u_hp);
 			
-			model.addObject("u_id", u_id);
-			model.setViewName("/2/login/findpwform2");
-			
+			 String innum=String.valueOf(session.getAttribute("innum"));
+			 //System.out.println(innum);
+			 //System.out.println(otp);
+			 
+			 
+			 if(otp.equals(innum)) {
+				 model.addObject("u_id", u_id);
+				model.setViewName("/2/login/findpwform2");
+			 }
+				else {
+					model.setViewName("redirect:/2/login/findpwform");
+				}
+				
 			return model;
 		}
+		
+		//버튼눌럿을때 인증번호 받고 체크
 		@PostMapping("/checkuserinfo")
 		@ResponseBody
 		public String checkuserinfo(@RequestParam String u_id,
 		@RequestParam String u_hp,
 		HttpSession session)
 		{
+		
 		int codecheck=service.findpwstart(u_id, u_hp);
+		
 		if(codecheck==1) {
+			int innum = service.randomnum();
+			
+			
+			//coolsms 문자
+			DefaultMessageService messageService =  NurigoApp.INSTANCE.initialize("NCS95BFETLQ3QNUG", "3M5CKRRS4JLB6WMHYLEIEJIQFP1YWLSB", "https://api.coolsms.co.kr/");
+					// Message 패키지가 중복될 경우 net.nurigo.sdk.message.model.Message로 치환하여 주세요
+					Message message = new Message();
+					message.setFrom("01036121425"); //01036121425
+					message.setTo(u_hp);
+					message.setText("[4B]인증번호"+innum+"입니다."); 
+					
+					session.setAttribute("innum",innum);
+
+				try {
+					  // send 메소드로 ArrayList<Message> 객체를 넣어도 동작합니다!
+					  messageService.send(message);
+					} catch (NurigoMessageNotReceivedException exception) {
+					  // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
+					  System.out.println(exception.getFailedMessageList());
+					  System.out.println(exception.getMessage());
+					} catch (Exception exception) {
+					  System.out.println(exception.getMessage());
+					}
+					
 			return "match";
 		}
 		else {

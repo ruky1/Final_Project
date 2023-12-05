@@ -35,7 +35,7 @@
 						<jsp:param value="${n_dto.n_num }" name="num"/>
 					</jsp:include>
 						<c:choose>
-						    <c:when test="${a_write eq 2}">
+						    <c:when test="${a_right eq 2}">
 						        <button type="button" class="u_del btn btn-outline-danger" num="${u_dto.u_id}">삭제</button>
 						    </c:when>
 						    <c:otherwise>
