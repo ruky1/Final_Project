@@ -58,7 +58,7 @@
 		                </div> 
 		                <div class="card-body p-4">
 			            	<div class="text-center">
-			            		<h5 class="fw-bolder">${dto.j_title}</h5>
+			            		<h5 class="fw-bolder card-title">${dto.j_title}</h5>
 			            		<fmt:formatNumber value="${dto.j_price}" type="currency"/>
 							</div>
 						</div>

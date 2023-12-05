@@ -105,6 +105,10 @@ body {
 }
 
 /*	HC's_CSS	--	start	*/
+.card-title{
+	font-family: Binggrae-Bold;
+}
+
 .addr_option{
 	cursor: pointer;
   	padding: .375rem .75rem;

@@ -114,7 +114,7 @@
 		                </div> 
 		                <div class="card-body p-4">
 			            	<div class="text-center">
-			            		<h5 class="fw-bolder">${dto.j_title}</h5>
+			            		<h5 class="fw-bolder card-title">${dto.j_title}</h5>
 			            		<fmt:formatNumber value="${dto.j_price}" type="currency"/>
 							</div>
 						</div>
@@ -178,11 +178,12 @@
 </script>
 <script type="text/javascript">
 let currentPage = 0;
-
+// 감지 대상
 const targetList = document.querySelector('#loadingList');
 
 const observerList = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
+	  // 감지시 결과갑
     if (entry.isIntersecting) {
       console.log('Intersection detected. Loading next page.');
 
@@ -201,9 +202,9 @@ const observerList = new IntersectionObserver((entries) => {
               perpage: perpage
             },
             success: function(data) {
-         	  	console.log(data);
-         	  	console.log(currentPage);
-    			var content="";
+         	  	// console.log(data);
+         	  	// console.log(currentPage);
+    			var content="";							//리스트를 담을 content
     			
     			 $.each(data, function name(i, dto) {
     				function formatCurrency(price) {

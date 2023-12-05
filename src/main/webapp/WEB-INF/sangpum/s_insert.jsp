@@ -93,8 +93,8 @@
 					<hr>
 					<div align="center">
 						<button type="submit" class="btn btn-outline-dark mt-auto" style="width: 150px;">저장</button>
-						<button type="button" onclick="location.href=''"
-							style="width: 150px;" class="btn btn-outline-dark mt-auto">미리보기</button>
+						<!-- <button type="button" onclick="location.href=''"
+							style="width: 150px;" class="btn btn-outline-dark mt-auto">미리보기</button> -->
 						<!-- <button type="button" onclick="location.href='/'"
 							style="width: 150px;" class="btn btn-outline-dark mt-auto">목록으로 이동</button> -->	
 					</div>
