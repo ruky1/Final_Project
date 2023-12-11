@@ -1,4 +1,5 @@
-![image](https://github.com/ruky1/Final_Project/assets/45508671/53a9c7c6-56f8-4651-9b9c-2fdecb4ca084)![image](https://github.com/ruky1/Final_Project/assets/45508671/d1598e17-fc7f-4dc3-8dff-b2ba4dbd34b8)# Final_Project
+![image](https://github.com/ruky1/Final_Project/assets/45508671/5fd85f81-a0a1-4621-af52-38c5b4e65096)
+# Final_Project
 
 
 <img src="" />
