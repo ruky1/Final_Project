@@ -104,6 +104,203 @@ body {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+/*	HC's_CSS	--	start	*/
+.card-title{
+	font-family: Binggrae-Bold;
+}
+
+.addr_option{
+	cursor: pointer;
+  	padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--bs-body-color);
+    background-color: var(--bs-body-bg);
+    background-clip: padding-box;
+    border: var(--bs-border-width) solid var(--bs-border-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: var(--bs-border-radius);
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.sort{
+	display: flex;
+	justify-content: space-between;
+}
+.sort_insert{
+	float: left;
+}
+
+.sort_listType{
+	  float: right;
+  }
+#listType{
+	display: none;	
+}
+
+#addrType{
+	display: none;
+}
+
+.explanation-area{
+	padding-top: 0.5rem;
+}
+
+.explanation{
+	font-size: 25px;
+}
+.Product_title, .Product_category, .Product_name, .Product_price, .Product_file {
+	display: flex;
+	justify-content: space-between;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+}
+
+.Product_content > textarea{
+	height: 30vh;
+	padding-top: 0.25rem;
+	padding-bottom: 0.25rem;
+}
+
+.insert_content{
+	width: 23vw;
+}
+
+/* 카카오 채팅하기 아이콘*/ 
+.kakao_inquiry {		
+	float: right;
+	display: flex;
+	margin-right: 6.7rem;
+	width: 7rem;
+    height: 3rem;
+    z-index: 99;
+}
+.kakao_inquiry_main {		
+	float: right;
+	display: flex;
+	margin-right: 6.7rem;
+	margin-top: -5rem; 
+	width: 7rem;
+    height: 3rem;
+    z-index: 99;
+}
+
+
+.UI_option{
+	float: right;
+	display: flex;
+	justify-content: space-between;
+	margin-right: 0rem;
+	margin-top: -5rem; 
+	
+	}
+
+.pageList{
+	margin-left: 15rem;
+}
+
+#add-channel-button > a > img {
+	height: 3rem;
+}
+
+ /*!sc*/
+.write {
+    height: 40px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 1rem;
+    border-radius: 20px;
+    background: none;
+    border: 0.5px solid darkGray;
+    outline: none;
+    font-weight: bold;
+    word-break: keep-all;
+    background: var(--bg-element5);
+    color: var(--button-text);
+    -webkit-transition: 0.125s all ease-in;
+    transition: 0.125s all ease-in;
+    cursor: pointer;
+    font-family: Binggrae-Bold;
+}
+
+/*!sc*/
+.write:hover {
+    background: var(--bg-element6);
+}
+
+/*!sc*/
+.write:focus {
+    box-shadow: 0px 2px 12px #00000030;
+}
+
+/*!sc*/
+.write:disabled {
+    background: var(--bg-element2);
+}
+
+
+.info_between{
+	display: flex;
+    justify-content: space-between;
+}
+.addr-type {
+	padding-left: 0rem;
+}
+
+.list-type {
+	padding-left: 0rem;
+}
+.list-type > a{
+	text-decoration: none;
+}
+.addr-type > a {
+    text-decoration: none;
+}
+.item-list-content {
+	text-decoration: none;
+	width: 65rem;
+}
+
+.item-list-div {
+	display: flex;
+}
+
+.item-list-img-area {
+	width: 16rem;
+	}
+
+.item-list-img {
+  	width: 100%;
+  	height: 16rem;
+}
+.region-name{
+	font-size: 12px;
+}
+
+.explanation{
+	font-size: 18px;
+}
+
+.item-list-title {
+    font-family: Binggrae-Bold;
+	
+}
+
+.item-list-price {
+	float: right;
+    font-family: Binggrae-Bold;
+}
+
+.insert_addr_area{
+	display: flex;
+	width: 16vw;
+}
+
+
+/*	HC's_CSS	--	end	*/
+
 hr {
   margin: 1rem 0;
   color: inherit;
@@ -184,7 +381,7 @@ address {
 
 ol,
 ul {
-  padding-left: 2rem;
+  /*padding-left: 2rem;*/
 }
 
 ol,
@@ -730,7 +927,7 @@ progress {
 
 .col-3 {
   flex: 0 0 auto;
-  width: 25%;
+  width: 24%;
 }
 
 .col-4 {
@@ -4260,10 +4457,15 @@ textarea.form-control-lg {
   border-radius: var(--bs-card-inner-border-radius);
 }
 
-.card-img,
+.card-img{
+	width: 14vw;
+	height: 16vw;
+}
+
 .card-img-top,
 .card-img-bottom {
-  width: 100%;
+  	width: 100%;
+	height: 100%;
 }
 
 .card-img,
@@ -7735,19 +7937,6 @@ textarea.form-control-lg {
   padding-right: 1rem !important;
   padding-left: 1rem !important;
 }
-
-.sort{
-	display: flex;
-	justify-content: space-between;
-}
-.sort_insert{
-	float: left;
-}
-
-.sort_listType{
-	  float: right;
-  }
-
 
 .px-4 {
   padding-right: 1.5rem !important;

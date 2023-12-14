@@ -45,16 +45,29 @@
    
    <!-- admin_레이아웃 -->
    <definition name="admin_layout" template="/WEB-INF/layout-admin/admin_layout.jsp">
-      <put-attribute name="main" value="/WEB-INF/layout-admin/admin_main.jsp"/>
+      <put-attribute name="main" value="/WEB-INF/layout-admin/admin_main/admin_main.jsp"/>
       <put-attribute name="menu" value="/WEB-INF/layout-admin/admin_menu.jsp"/> 
    </definition>
    
    <!-- wild card admin_레이아웃 -->
-   <definition name="/admin/*/*" extends="admin_layout">
-   	<put-attribute name="main" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   <definition name="/admin/*/*/*" extends="admin_layout">
+   	<put-attribute name="main" value="/WEB-INF/{1}/{2}/{3}.jsp"></put-attribute>
    </definition>
    
    
-
-   
+	<!-- insert page -->
+   <!-- 
+   <definition name="product" template="/WEB-INF/layout2/layout2.jsp">
+      <put-attribute name="menu" value="/WEB-INF/layout/menu.jsp"/>
+      <put-attribute name="main" value="/WEB-INF/layout/main.jsp"/>
+      <put-attribute name="footer" value="/WEB-INF/layout/footer.jsp"/>
+   </definition>
+    -->
+    
+   <!-- wild card 레이아웃2 -->
+   <!-- 
+   <definition name="/products/*/*" extends="product">
+   	<put-attribute name="main" value="/WEB-INF/{1}/{2}.jsp"></put-attribute>
+   </definition>
+    -->
 </tiles-definitions>

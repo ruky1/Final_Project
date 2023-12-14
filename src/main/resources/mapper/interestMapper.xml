@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boot.data.mapper.InterestMapperInter">
+	<insert id="insertInterest" parameterType="Map">
+		insert into likes values (null, #{i_id}, #{i_sangpum})
+	</insert>
+	
+	<delete id="deleteInterest" parameterType="Map">
+		delete from likes where i_id=#{i_id} and i_sangpum=#{i_sangpum}
+	</delete>
+	
+	<select id="getCount" parameterType="Map" resultType="int">
+		select count(*) from likes where i_id=#{i_id} and i_sangpum=#{i_sangpum}
+	</select> 
+	<select id="countlikes" parameterType="String" resultType="int">
+		select count(*) from likes where i_id=#{i_id}
+	</select>
+
+	<select id="selectlikesangpum" parameterType="String" resultType="sangpum">
+		select * from junggosangpum where j_sangid in (
+		select i_sangpum from likes where i_id=#{i_id})
+	</select>
+</mapper>

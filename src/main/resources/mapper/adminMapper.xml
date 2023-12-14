@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boot.data.mapper.AdminMapper">
+
+	<select id="getAdminID" parameterType="String" resultType="admin">
+		select * from admin where a_id=#{a_id}
+	</select>
+	
+	<select id="adminLoginPassCheck" parameterType="Map" resultType="int">
+		select count(*) from admin where a_id=#{a_id} and a_pass=#{a_pass}
+	</select>
+	
+	<insert id="insertNotice" parameterType="noticeDto">
+		insert into notice (n_title,n_content,n_hits,n_id,n_name,n_registration_date) values(#{n_title},#{n_content},0,#{n_id},#{n_name},now())
+	</insert>
+	
+	<select id="getAllNotice" resultType="noticeDto">
+		select * from notice order by n_num
+	</select>
+	
+	<select id="getAllNoticeList" parameterType="HashMap" resultType="noticeDto">
+		select * from notice order by n_num desc limit #{start},#{perPage}
+	</select>
+	<select id="getNoticeNum" parameterType="int" resultType="noticeDto">
+		select * from notice where n_num=#{n_num}
+	</select>
+	
+	<update id="updateNotice" parameterType="noticeDto">
+		update notice set n_title = #{n_title}, n_content = #{n_content}, n_registration_date = now() WHERE n_num = #{n_num}
+	</update>
+	
+	<delete id="deleteNotice" parameterType="int">
+		delete from notice where n_num=#{n_num}
+	</delete>
+	
+	<update id="failreset" parameterType="String">
+  	update user set failcount=0 where u_id=#{u_id}
+ 	</update>
+  
+   <select id ="failuser" resultType="login">
+  	select * from user where failcount>=10 
+  	</select>
+  
+  	<select id="userList" resultType="user">
+  		select * from user order by u_id
+  	</select>
+  	
+  	<select id="getTotalNoticeCount" resultType="int">
+  		select count(*) from notice
+  	</select>
+
+
+	<select id="adminSale" resultType="sangpum">
+		select * from junggosangpum where sellcomplete=0 order by j_postdate desc
+	</select>
+	
+	<select id="adminSaleComplete" resultType="sangpum">
+		select * from junggosangpum where sellcomplete=1 order by j_postdate desc
+	</select>
+	
+	<select id="adminTodayLogin" resultType="int">
+		select count(*) from user where DATE_FORMAT(u_final_logindate,"%Y-%m-%d")=CURDATE()
+	</select>
+	
+	<select id="adminYesterdayLogin" resultType="int">
+		select count(*) from user where DATE_FORMAT(u_final_logindate,"%Y-%m-%d")=CURDATE() - INTERVAL 1 DAY;
+	</select>
+	
+	<select id="adminWeekLogin" resultType="int">
+		SELECT COUNT(*) FROM user WHERE u_final_logindate BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK) AND NOW()
+	</select>
+	
+	<delete id="deleteUser" parameterType="String">
+		delete from user where u_id=#{u_id}
+	</delete>
+	
+</mapper>

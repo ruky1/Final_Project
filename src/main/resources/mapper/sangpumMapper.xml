@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boot.data.mapper.SangpumMapperInter">
+
+	<select id="getSangpumById" parameterType="int">
+  		select * from junggosangpum where j_sangid=#{j_sangid}
+  	</select>
+
+	<select id="getMaxNum" resultType="int">
+  		select ifnull(max(j_sangid),0) from junggosangpum
+  	</select>
+  	
+  	<select id="getMainCount" resultType="int">
+  		select count(*) from junggosangpum
+  	</select>
+ 
+  	<select id="getTotalCount" parameterType="Map" resultType="int">
+		select count(*) from junggosangpum
+		<if test="searchcolumn!=null and searchword!=null">				<!-- 넘기는 값이 있다면 그 값의 갯수를 계산한다 -->
+			where j_title like concat('%',#{search},'%')
+		</if>
+	</select>
+	<select id="getPagingList" parameterType="Map" resultType="sangpum">
+		select * from junggosangpum order by j_sangid desc
+		<if test="searchcolumn!=null and searchword!=null">				<!-- 넘기는 값이 있다면 그 값의 갯수를 계산한다 -->
+			where j_title like concat('%',#{search},'%')
+		</if>
+		limit #{startnum}, #{perpage}
+	</select>
+	
+	<insert id="insertSangpum" parameterType="sangpum">
+		insert into junggosangpum values(null, #{j_title}, #{j_price}, #{member_id}, #{member_name}, #{member_hp}, #{j_explanation}, #{j_category}, now(), #{j_addr}, #{j_imageurl} , 0, 0, 0)
+	</insert>
+
+	<update id="updateSangpum" parameterType="sangpum">
+		update junggosangpum set j_title=#{j_title}, j_price=#{j_price}, j_addr=#{j_addr}, j_explanation=#{j_explanation}
+		<if test="j_imageurl!='no'">
+			,j_imageurl=#{j_imageurl}
+		</if>
+		where j_sangid=#{j_sangid}
+	</update>
+	
+	<delete id="deleteSangpum" parameterType="int">
+		delete from junggosangpum where j_sangid=#{j_sangid}
+	</delete>
+	
+	<select id="getSangpum" resultType="sangpum" parameterType="int">
+		select * from junggosangpum where j_sangid=#{num}
+	</select>
+	
+	<update id="updateReadCount" parameterType="int">
+  		update junggosangpum set j_readcount=j_readcount+1 where j_sangid=#{num}
+  	</update>
+  	
+  	<update id="plusInterest" parameterType="int">
+  		update junggosangpum set j_interest=j_interest+1 where j_sangid=#{num}
+  	</update>
+  	
+  	<update id="minusInterest" parameterType="int">
+  		update junggosangpum set j_interest=j_interest-1 where j_sangid=#{num}
+  	</update>
+  	
+  	<!-- <select id="localSangpum" parameterType="Map" resultType="sangpum">
+  		select * from junggosangpum order by j_sangid desc
+  		<if test="j_addr!='allAddr'">
+  		 where j_addr like concat('%',#{j_addr},'%')
+  		</if>
+  		limit #{startnum}, #{perpage}
+  	</select> -->
+  	<select id="AjaxPaging" parameterType="Map" resultType="sangpum">
+  		select * from junggosangpum 
+  		<if test="j_addr!='allAddr'">
+  		 where j_addr like concat('%',#{j_addr},'%')
+  		</if>
+  		order by j_sangid desc
+  	</select>
+  	<select id="salesCount" parameterType="String" resultType="int">
+  		SELECT count(*) FROM junggosangpum JOIN purchase ON junggosangpum.j_sangid = purchase.j_sangid where junggosangpum.member_id = #{u_id};
+  	</select>
+  	
+</mapper>

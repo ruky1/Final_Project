@@ -13,10 +13,82 @@
    href="https://fonts.googleapis.com/css2?family=Dongle:wght@300&family=Gamja+Flower&family=Nanum+Pen+Script&family=Noto+Serif+KR:wght@200&display=swap"
    rel="stylesheet">
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-<title>Insert title here</title>
 
+<title>Insert title here</title>
+<style type="text/css">
+.searchResult{
+   cursor: pointer;
+}
+
+nav{
+   font-size: 1.5em;
+}
+
+.alarm {
+        width: 20px;
+        height: 20px;
+        border: 1px solid red;
+        background-color: red;
+        border-radius: 50%;
+        text-align: center;
+        float: right;
+        z-index: -1;
+        margin-right: 30px;
+    }
+    
+   .note-num {
+    position: absolute;
+    top: -2px;
+    right: -6.5px;
+    z-index: 3;
+    height: 17px;
+    width: 17px;
+    line-height: 20px;
+    text-align: center;
+    background-color: red;
+    border-radius: 15px;
+    display: inline-block;
+    padding:1px;
+    color: white;
+    font-size: 15px;
+}
+
+#notification {
+    /* background-image: url('../images/notification.svg'); */
+    position: relative;
+}
+
+.b_mo{
+	position: absolute;
+	top: 5vh;
+	right: 8vw;
+}
+
+.qwe{
+	position: absolute;
+	top: 2vh;
+	right: -15vw;
+}
+.qwe1{
+	position: absolute;
+	top: 2vh;
+	right: 10vw;
+}
+
+
+</style>
 <script type="text/javascript">
+
    $(function(){
+	   
+	   //$(".note-num").hide();
+	   
+	   wsOpen2(); //웹소켓 열기
+	   
+	   getMsgAlarm();
+	   
+	   
+	   
       $("#search").keyup(function(){
          
          var search=$(this).val();
@@ -59,8 +131,12 @@
       $("#btnsearch").click(function(){
          alert("이벤트 감지");
       });
+      
+      
+      
    });
    
+   <!--사용자 정의함수-->
    function selectSearch() {
        $(document).on("click","b.searchResult",function(event){
           var s=$(this).html();
@@ -79,68 +155,141 @@
    $(document).on("mouseout",".searchResult", function(event){
       $(this).css("background-color", "white");
    }); 
+   
+	var ws2;
+	
+	//웹소켓 오픈(메시지 알림)
+	function wsOpen2(){
+		ws2 = new WebSocket("ws://" + location.host + "/chating");
+		wsEvt2();
+	}
+	
+	function wsEvt2(){
+		ws2.onopen = function(data) {
+			//소켓이 열리면 초기화 세팅하기
+			getMsgAlarm();
+		}
+	
+		//메시지 잘 들어왔을 때 실행하는 내용
+		ws2.onmessage = function(data){
+			getMsgAlarm(); //메시지 개수 확인->알림표시
+		}
+	}
+	
+	function getMsgAlarm(){
+		
+		var user_id = "${sessionScope.myid}";
+		   
+		   if(user_id!="guest"){
+			   $.ajax({
+				   type:"get",
+				   dataType:"json",
+				   url:"/message/totalAlarm",
+				   data:{"user_id":user_id},
+				   success:function(res){
+					   
+					   if(res>0){//알림이 있을 경우
+							//$(".note-num").text(res);
+					   		//$(".note-num").show();
+					   		$("#note-num").addClass("note-num");
+					   		$(".note-num").text(res);
+					   }
+					   
+				   }
+			   });
+		   }
+		
+		
+	}
+	
+   
+   
 </script>
-<style type="text/css">
-.searchResult{
-   cursor: pointer;
-}
 
-nav{
-   font-size: 1.5em;
-}
-</style>
 </head>
 <body>
-	<!-- Navigation-->
-	<nav class="navbar navbar-expand-lg navbar-light">
-		<div class="container px-4 px-lg-3">
-			<a class="navbar-brand" href="/">
-				<img alt="" src="../img/icon.PNG" style="width: 20vh;"> 
-			</a>
-			<button class="navbar-toggler" type="button"
-				data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-				aria-controls="navbarSupportedContent" aria-expanded="false"
-				aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
-					<li class="nav-item"><a class="nav-link active" aria-current="page" href="/">Home</a></li>
-					<li class="nav-item"><a class="nav-link" href="#!">About</a></li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="navbarDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Fleamarket</a>
-						<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-							<li><a class="dropdown-item" href="/index2">All Products</a></li>
-							<li><hr class="dropdown-divider" /></li>
-							<li><a class="dropdown-item" href="#!">Popular Items</a></li>
-							<li><a class="dropdown-item" href="#!">New Arrivals</a></li>
-						</ul></li>
-				</ul>
-				
-				
-				<!-- 검색창 -->
-				<div class="input-group w-25" >
-					<input type="search" class="form-control rounded"
-						placeholder="Search" aria-label="Search"
-						aria-describedby="search-addon" id="search"/>
-					<button type="button" class="btn btn-dark" onclick="location.href='/search'">search</button>
-				</div>
-				
 
-            <div id="result"></div>
+   <!-- Navigation-->
+   <nav class="navbar navbar-expand-lg navbar-light">
+      <div class="container px-4 px-lg-3">
+         <a class="navbar-brand" href="/"> <img alt=""
+            src="../img/icon.PNG" style="width: 20vh;">
+         </a>
+         <button class="navbar-toggler" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+         </button>
+         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+               <li class="nav-item"><a class="nav-link active"
+                  aria-current="page" href="/">Home</a></li>
+               <li class="nav-item"><a class="nav-link" href="about">About</a></li>
+               <li class="nav-item dropdown"><a
+                  class="nav-link dropdown-toggle" id="navbarDropdown" href="#"
+                  role="button" data-bs-toggle="dropdown" aria-expanded="false">Fleamarket</a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                     <li><a class="dropdown-item" href="/list">All Products</a></li>
+                     <li><hr class="dropdown-divider" /></li>
+                     <li><a class="dropdown-item" href="#!">Popular Items</a></li>
+                     <li><a class="dropdown-item" href="/">New Arrivals</a></li>
+                  </ul></li>
+            </ul>
+
+
+
+            <div style="justify-content: space-between;">
+            <c:if test="${sessionScope.loginok==null}">
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='../loginform'">로그인</button>
+            </c:if>
             
+            <c:if test="${sessionScope.loginok!=null}">
+            <img alt="" src="../img/loginprofile.png" width="30vw" height="30vh" align="left" style="border-radius:30px; border: 1px solid gray;"/>
+            <b style="font-size: 0.7em; float: left;">${sessionScope.myname}님이 로그인중입니다</b>
+             <i class="bi bi-bell" id="notification" style="cursor: pointer; font-size: 0.8em;" onclick="location.href='/goChattingRoom'"><span id="note-num" style="font-size: 0.8em;"></span></i><br>
+            <button type="button" class="btn btn-outline-secondary" onclick="location.href='../logoutprocess'">로그아웃</button>
+            </c:if>
+            
+            
+            
+             
+            <!-- 마이페이지 -->
+            <c:if test="${sessionScope.loginok!=null }">
+               <input type="button" value="마이페이지" onclick="location.href='../mypage?u_id=${sessionScope.myid}'" class="btn btn-outline-primary">
+            </c:if>
 
-            <!-- 장바구니 -->
-            <!-- <form class="d-flex">
-               <button class="btn btn-outline-dark" type="submit">
-                  <i class="bi-cart-fill me-1"></i> Cart <span
-                     class="badge bg-dark text-white ms-1 rounded-pill">0</span>
-               </button>
-            </form> -->
+            <!-- 검색창 -->
+            <span class="w-25">
+              
+              <c:choose>
+               <c:when test="${sessionScope.myid == null}">
+                  <input type="hidden" value="${sessionScope.myid = 'guest'}">
+                  <i class="bi bi-search" onclick="location.href='/search?s_id=${sessionScope.myid}'" style="cursor: pointer;"></i>
+               </c:when>
+               
+               <c:when test="${sessionScope.myid != null}">
+                  <i class="bi bi-search" onclick="location.href='/search?s_id=${sessionScope.myid}'" style="cursor: pointer;"></i>
+                  <!-- 채팅방 , /message/getMessageList?user_id=${sessionScope.myid}-->
+              
+                  
+                    
+                     
+                  
+               </c:when>
+               <c:otherwise>
+               <p>와 호스기 보소</p>
+               </c:otherwise>
+               </c:choose>
+                  
+            </span>
+
          </div>
          
       </div>
 
+      <div id="result"></div>   
+   </div>
    </nav>
          
 </body>

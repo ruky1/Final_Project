@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="boot.data.mapper.PurchaseMapperInter">
+	<insert id="insertPurchase" parameterType="Map">
+		insert into purchase values (null, #{u_id}, #{j_sangid}, #{p_method}, now())
+	</insert>
+	
+	<update id="updatesellcomplete" parameterType="int">
+		update junggosangpum set sellcomplete=1 where j_sangid=#{j_sangid}
+	</update>
+
+	<select id="countpurchase" parameterType="String" resultType="int">
+		select count(*) from purchase where u_id=#{u_id}
+	</select>
+	
+	<select id="selectpurchase" parameterType="String" resultType="String">
+		select p_date from purchase where u_id=#{u_id}
+	</select>
+	
+	 <select id="selectbuysangpum" parameterType="String" resultType="sangpum">
+  		select * from junggosangpum where j_sangid in (
+		select j_sangid from purchase where u_id=#{u_id})
+  	</select>
+  	
+  	<select id="countIdOfsell" parameterType="String" resultType="int">
+  		select count(*) from junggosangpum where member_id=#{member_id} and sellcomplete=0
+  	</select>
+  	
+  	<select id="sellsangpumlist" parameterType="String" resultType="sangpum">
+  		select * from junggosangpum where member_id=#{member_id} and sellcomplete=0
+  	</select>
+  	
+  	<select id="countsellcomplete" parameterType="String" resultType="int">
+  		select count(*) from junggosangpum JOIN purchase ON junggosangpum.j_sangid = purchase.j_sangid
+		where junggosangpum.member_id = #{member_id}
+  	</select>
+  	
+  	<select id="sellcomplete" parameterType="String" resultType="sangpum">
+  		select * from junggosangpum JOIN purchase ON junggosangpum.j_sangid = purchase.j_sangid
+		where junggosangpum.member_id = #{member_id}
+  	</select>
+  	
+  	<select id="selectselldate" parameterType="String" resultType="String">
+  		SELECT p_date FROM purchase JOIN junggosangpum
+    	on purchase.j_sangid = junggosangpum.j_sangid
+		where junggosangpum.member_id = #{member_id};
+  	</select>
+	
+</mapper>

@@ -1,9 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
-"https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="boot.data.mapper.SearchMapperInter">
 	<select id="sangSearch" parameterType="String" resultType="String">
   		select j_title from junggosangpum where j_title like concat('%',#{search},'%')  order by j_title limit 5
   	</select>
+  	
+  	<select id="mainSangList" parameterType="String" resultType="sangpum">
+  		select * from junggosangpum where j_title like concat('%',#{search},'%') order by j_readcount desc
+  	</select>
+  	
+  	
+  	<select id="sangList" parameterType="String" resultType="sangpum">
+  		select * from junggosangpum where j_title like concat('%',#{search},'%') 
+  		<if test="category!='all'"> 
+  		and j_category=#{category}
+  		</if>
+  		order by ${option}
+  		<if test="option!='J_PRICE'">desc</if>
+  		
+  	</select>
+  	
+  	<select id="getSangpumCount" parameterType="String" resultType="int">
+  		select count(*) from junggosangpum where j_title like concat('%',#{search},'%')
+  		<if test="category!='all'">
+  		and j_category=#{category}
+  		</if>
+  	</select>
+  	
+  	<select id="searchSave" parameterType="String" resultType="searchdto">
+  		select * from searchsave where s_id=#{s_id} order by s_num desc limit 7
+  	</select>
+  	
+  	<select id="bestsearch" resultType="String">
+  		select j_title from junggosangpum order by j_readcount limit 20
+  	</select>
+  	
+  	<insert id="searchsaveinsert" parameterType="String">
+  		insert into searchsave (s_id,s_searchword) values (#{s_id},#{s_searchword})
+  	</insert>
+  	
+  	<select id="countsearchword" parameterType="String" resultType="int">
+  		select count(*) from searchsave where s_id=#{s_id} and s_searchword=#{s_searchword}
+  	</select>
+  	
+  	<delete id="recentdelete" parameterType="String">
+  		delete from searchsave where s_num=#{s_num}
+  	</delete>
+  	
+  	<delete id="allrecentdelete" parameterType="String">
+  		delete from searchsave where s_id=#{s_id}
+  	</delete>
 </mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="boot.data.mapper.LoginMapperInter">
+  
+  <insert id="insertMember" parameterType="login">
+  insert into user (u_id,u_name,u_email,u_pass,u_writerdate,u_final_logindate,u_hp) values (#{u_id},#{u_name},#{u_email},#{u_pass},now(),now(),#{u_hp})
+  </insert>
+  
+  <select id="getAllMembers" resultType="login">
+  select * from user order by u_id
+  </select>
+  
+  <select id="getSerchId" parameterType="String" resultType="int">
+  select count(*) from user where u_id=#{u_id} 
+  </select>
+  
+  
+  <select id="getName" parameterType="String" resultType="String">
+  select u_name from user where u_id=#{u_id}
+  </select>
+  
+  <select id="loginPassCheck" parameterType="Map" resultType="int">
+  select count(*) from user where BINARY(u_id)=#{u_id} and BINARY(u_pass)=#{u_pass}
+  </select>
+  
+  <select id="getDataById" parameterType="String" resultType="login"> 
+  select * from user where u_id=#{u_id}
+  </select>
+  
+  <update id="updateuserinfo" parameterType="login">
+  	update user set u_pass=#{u_pass},u_name=#{u_name},u_email=#{u_email},u_hp=#{u_hp} where u_id=#{u_id}
+  </update>
+  
+  <select id="findIdCheck" parameterType="Map" resultType="int">
+  select count(*) from user where BINARY(u_name)=#{u_name} and BINARY(u_email)=#{u_email} and BINARY(u_hp)=#{u_hp}
+  </select>
+  
+  <select id="getId" parameterType="String" resultType="String">
+  select u_id from user where u_name=#{u_name} and u_email=#{u_email} and u_hp=#{u_hp}
+  </select>
+  
+  <update id="failcount" parameterType="String">
+  update user set failcount=failcount+1 where u_id=#{u_id}
+  </update>
+  
+  <update id="failreset" parameterType="String">
+  update user set failcount=0 where u_id=#{u_id}
+  </update>
+  
+  <select id="failcheck" parameterType="String" resultType="int">
+  select failcount from user where u_id=#{u_id}
+  </select>
+  
+  <select id="findpwstart" parameterType="Map" resultType="int">
+  select count(*) from user where BINARY(u_id)=#{u_id} and BINARY(u_hp)=#{u_hp}
+  </select>
+  
+  <update id="pwchange" parameterType="String">
+  update user set u_pass=#{u_pass} where u_id=#{u_id}
+  </update>
+  
+  
+  
+  </mapper>

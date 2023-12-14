@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boot.data.mapper.MessageMapperInter">
+
+	<select id="selectAllChatByRoom" parameterType="int" resultType="message" >
+		select * from message where room_num=#{room_num}
+	</select>
+	<insert id="insertMessage" parameterType="message">
+		insert into message values(null,#{room_num},#{sender_id},#{receiver_id},1, #{mess_content},now())
+	</insert>
+	<delete id="deleteMessage" parameterType="int">
+		delete from message where mess_num=#{mess_num}
+	</delete>
+	<select id="selectMaxNum" resultType="int">
+		select max(mess_num) from message
+	</select>
+	<delete id="deleteMessageByRoom" parameterType="int">
+		delete from message where room_num=#{room_num}
+	</delete>
+	<select id="getRecentMessageByRoom" parameterType="int" resultType="int">
+		select ifnull(max(mess_num),0) from message where room_num=#{room_num}
+	</select>
+	<select id="getMessageByNum" parameterType="int" resultType="message">
+		select * from message where mess_num=#{mess_num}
+	</select>
+	<update id="messageReadByNum" parameterType="int" >
+		update message set mess_readCnt=0 where mess_num=#{mess_num}
+	</update>
+	<select id="unReadMessByRoom" parameterType="Map" resultType="int">
+		select ifnull(count(mess_num),0) from message where mess_readCnt=1 and receiver_id=#{user_id} and room_num=#{room_num}
+	</select>
+	<select id="totalUnreadMessByUserID" parameterType="String" resultType="int">
+		select count(mess_num) from message where receiver_id=#{user_id} and mess_readCnt=1
+	</select>
+	
+</mapper>

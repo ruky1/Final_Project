@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTDMapper3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boot.data.mapper.MessageRoomMapperInter">
+	<select id="getMaxRoom" resultType="int">
+		select max(room_num) from messageroom 
+	</select>
+	<select id="getRoomBySangIdxAndUserId" parameterType="map" resultType="String">
+		select * from messageroom where j_sangid=#{j_sangid} and sender_id=#{sender_id}
+	</select>
+	<insert id="insertRoom" parameterType="room">
+		insert into messageroom values(null,#{j_sangid},#{sender_id},#{receiver_id},now())
+	</insert>
+	<select id="getRoomById" parameterType="int" resultType="room">
+		select * from messageroom where room_num=#{room_num}
+	</select>
+	<select id="getRoomsBySangpum" parameterType="int" resultType="room">
+		select * from messageroom where j_sangid=#{j_sangid} order by room_num desc
+	</select>
+	<select id="selectAllRooms" parameterType="Map" resultType="room">
+		select distinct * from messageroom where (sender_id=#{user_id} or receiver_id=#{user_id})
+		<if test="sangidx!=0">
+			and j_sangid=#{sangidx}
+		</if>		 
+	</select>
+	<select id="getCountAllRoomsBySangpum" parameterType="int" resultType="int">
+		select count(*) from messageroom where j_sangid=#{sangidx}
+
+	</select>
+</mapper>
